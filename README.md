@@ -1,6 +1,5 @@
 # exploratory_data_analysis
- python class for EDA
- Class to conduct exploratory analysis of dataframe (df) for a given dependent 
+Class to conduct exploratory analysis of dataframe (df) for a given dependent 
     variable (dep) and indepent quan variables (indq). If independent quan variables 
     (indq) not given, selects all int/float columns apart from dependent variable as 
     independent quan variables
