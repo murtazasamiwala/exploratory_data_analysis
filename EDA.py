@@ -145,15 +145,24 @@ def null_check(df,drop_thresh=90):
 
 
 class ChiSquare:
-    def __init__(self, dataframe):
+    def __init__(self, dataframe, continous=None,colY,bins=5):
         self.df = dataframe
+        self.colY=colY
         self.p = None #P-Value
         self.chi2 = None #Chi Test Statistic
         self.dof = None
+        self.bins=bins
         
         self.dfObserved = None
         self.dfExpected = None
         self.drop_list=[]
+
+        self.q=[]
+        for i in self.df.columns:
+            if self.df[i].dtype in [int,'int64',float] and i!=dep:
+                self.q.append(i)
+        
+        self.continous=continous if continous is not None else self.q
         
     def _print_chisquare_result(self, colX, alpha):
         result = ""
@@ -166,8 +175,11 @@ class ChiSquare:
         print(result)
         
     def TestIndependence(self,colX,colY, alpha=0.05):
-        X = self.df[colX].astype(str)
-        Y = self.df[colY].astype(str)
+        if colX in self.continous:
+            X = pd.qcut(self.df[colX],q=self.bins).astype('str')
+        else:
+            X =self.df[colX].astype(str)
+        Y = self.df[self.colY].astype(str)
         
         self.dfObserved = pd.crosstab(Y,X) 
         chi2, p, dof, expected = stats.chi2_contingency(self.dfObserved.values)
@@ -179,9 +191,9 @@ class ChiSquare:
         
         self._print_chisquare_result(colX,alpha)
     
-    def Testall(self,colY):
+    def Testall(self):
         for i in self.df.columns:
-            self.TestIndependence(i,colY)
+            self.TestIndependence(i,self.colY)
         return self.drop_list
 
 
