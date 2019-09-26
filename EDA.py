@@ -159,7 +159,7 @@ class ChiSquare:
 
         self.q=[]
         for i in self.df.columns:
-            if self.df[i].dtype in [int,'int64',float] and i!=dep:
+            if self.df[i].dtype in [int,'int64',float] and i!=self.colY:
                 self.q.append(i)
         
         self.continous=continous if continous is not None else self.q
@@ -176,7 +176,7 @@ class ChiSquare:
         
     def TestIndependence(self,colX,colY, alpha=0.05):
         if colX in self.continous:
-            X = pd.qcut(self.df[colX],q=self.bins).astype('str')
+            X = pd.qcut(self.df[colX],q=self.bins, duplicates='drop').astype('str')
         else:
             X =self.df[colX].astype(str)
         Y = self.df[self.colY].astype(str)
