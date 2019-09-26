@@ -145,7 +145,7 @@ def null_check(df,drop_thresh=90):
 
 
 class ChiSquare:
-    def __init__(self, dataframe, continous=None,colY,bins=5):
+    def __init__(self, dataframe,colY, continous=None,bins=5):
         self.df = dataframe
         self.colY=colY
         self.p = None #P-Value
